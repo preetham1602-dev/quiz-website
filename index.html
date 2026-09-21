@@ -3,42 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
+
+    <title>QuizMaster</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="quiz-container">
+    <div class="app">
 
-        <div id="quiz-screen">
-            <div class="top">
-                <span id="question-number">Question 1/5</span>
-                <span id="score">Score: 0</span>
+        <!-- START SCREEN -->
+        <div id="startScreen" class="screen">
+
+            <div class="logo">Q</div>
+
+            <p class="tag">TEST YOUR KNOWLEDGE</p>
+
+            <h1>QuizMaster</h1>
+
+            <p class="description">
+                Challenge yourself with this quick quiz.
+                Choose the correct answer and see your score.
+            </p>
+
+            <div class="info">
+
+                <div class="infoBox">
+                    <strong id="totalQuestionsStart">5</strong>
+                    <span>Questions</span>
+                </div>
+
+                <div class="infoBox">
+                    <strong>4</strong>
+                    <span>Options</span>
+                </div>
+
             </div>
 
-            <div class="progress">
-                <div id="progress-bar"></div>
-            </div>
+            <button id="startBtn" class="primaryBtn">
+                Start Quiz
+            </button>
 
-            <h1 id="question">Question goes here</h1>
-
-            <div id="options"></div>
-
-            <button id="next-btn" disabled>Next</button>
         </div>
 
-        <div id="result-screen" class="hidden">
-            <h1>Quiz Completed!</h1>
 
-            <p>Your Score</p>
-            <h2 id="final-score">0/5</h2>
+        <!-- QUIZ SCREEN -->
+        <div id="quizScreen" class="screen hidden">
 
-            <button onclick="restartQuiz()">Play Again</button>
+            <div class="quizTop">
+
+                <div>
+                    <span class="label">QUESTION</span>
+                    <strong id="questionCount">1 / 5</strong>
+                </div>
+
+                <div class="score">
+                    <span class="label">SCORE</span>
+                    <strong id="score">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="progress">
+                <div id="progress"></div>
+            </div>
+
+
+            <h2 id="question">
+                Question
+            </h2>
+
+
+            <div id="answers" class="answers"></div>
+
+
+            <button id="nextBtn" class="primaryBtn nextBtn" disabled>
+                Next Question
+            </button>
+
+        </div>
+
+
+        <!-- RESULT SCREEN -->
+        <div id="resultScreen" class="screen result hidden">
+
+            <div class="resultCircle">
+                ✓
+            </div>
+
+            <p class="tag">QUIZ COMPLETED</p>
+
+            <h1>Great Job!</h1>
+
+            <p class="resultText">
+                You completed the quiz.
+            </p>
+
+            <div class="finalScore">
+
+                <span id="finalScore">0</span>
+
+                <small>
+                    / <span id="totalQuestions">5</span>
+                </small>
+
+            </div>
+
+            <div class="percentage" id="percentage">
+                0% Correct
+            </div>
+
+            <button id="restartBtn" class="primaryBtn">
+                Try Again
+            </button>
+
         </div>
 
     </div>
 
+
     <script src="script.js"></script>
+
 </body>
 </html>
