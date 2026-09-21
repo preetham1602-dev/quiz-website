@@ -1,148 +1,370 @@
 const questions = [
+
     {
         question: "Which language is mainly used to style web pages?",
-        options: ["HTML", "CSS", "JavaScript", "Python"],
+
+        options: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "Python"
+        ],
+
         answer: "CSS"
     },
 
+
     {
-        question: "Which language is used to add interactivity to websites?",
-        options: ["HTML", "CSS", "JavaScript", "SQL"],
+        question: "Which language is used to make web pages interactive?",
+
+        options: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "SQL"
+        ],
+
         answer: "JavaScript"
     },
 
+
     {
         question: "What does HTML stand for?",
+
         options: [
             "Hyper Text Markup Language",
             "High Tech Modern Language",
             "Hyper Tool Multi Language",
             "Home Text Markup Language"
         ],
+
         answer: "Hyper Text Markup Language"
     },
 
+
     {
         question: "Which symbol is used for an ID selector in CSS?",
-        options: [".", "#", "*", "$"],
+
+        options: [
+            ".",
+            "#",
+            "*",
+            "$"
+        ],
+
         answer: "#"
     },
 
+
     {
         question: "Which method converts JSON text into a JavaScript object?",
+
         options: [
             "JSON.parse()",
             "JSON.convert()",
             "JSON.object()",
             "JSON.toObject()"
         ],
+
         answer: "JSON.parse()"
     }
+
 ];
 
+
+// VARIABLES
+
 let currentQuestion = 0;
+
 let score = 0;
 
-const questionElement = document.getElementById("question");
-const optionsElement = document.getElementById("options");
-const nextButton = document.getElementById("next-btn");
-const questionNumber = document.getElementById("question-number");
-const scoreElement = document.getElementById("score");
-const progressBar = document.getElementById("progress-bar");
+let answered = false;
+
+
+// ELEMENTS
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const quizScreen =
+    document.getElementById("quizScreen");
+
+const resultScreen =
+    document.getElementById("resultScreen");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const restartBtn =
+    document.getElementById("restartBtn");
+
+const questionElement =
+    document.getElementById("question");
+
+const answersElement =
+    document.getElementById("answers");
+
+const questionCount =
+    document.getElementById("questionCount");
+
+const scoreElement =
+    document.getElementById("score");
+
+const progressElement =
+    document.getElementById("progress");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const totalQuestions =
+    document.getElementById("totalQuestions");
+
+const percentage =
+    document.getElementById("percentage");
+
+const totalQuestionsStart =
+    document.getElementById("totalQuestionsStart");
+
+
+// SHOW TOTAL QUESTIONS
+
+totalQuestionsStart.textContent =
+    questions.length;
+
+
+// START QUIZ
+
+startBtn.addEventListener("click", () => {
+
+    startScreen.classList.add("hidden");
+
+    quizScreen.classList.remove("hidden");
+
+    loadQuestion();
+
+});
+
+
+// LOAD QUESTION
 
 function loadQuestion() {
 
-    const q = questions[currentQuestion];
+    answered = false;
 
-    questionElement.textContent = q.question;
+    nextBtn.disabled = true;
 
-    questionNumber.textContent =
-        `Question ${currentQuestion + 1}/${questions.length}`;
+    const current =
+        questions[currentQuestion];
 
-    scoreElement.textContent = `Score: ${score}`;
 
-    progressBar.style.width =
-        `${((currentQuestion) / questions.length) * 100}%`;
+    // Counter
 
-    optionsElement.innerHTML = "";
+    questionCount.textContent =
+        `${currentQuestion + 1} / ${questions.length}`;
 
-    nextButton.disabled = true;
 
-    q.options.forEach(option => {
+    // Score
 
-        const button = document.createElement("button");
+    scoreElement.textContent =
+        score;
 
-        button.textContent = option;
-        button.classList.add("option");
 
-        button.onclick = () => selectAnswer(button, option);
+    // Question
 
-        optionsElement.appendChild(button);
+    questionElement.textContent =
+        current.question;
+
+
+    // Progress
+
+    const progress =
+        ((currentQuestion + 1) / questions.length) * 100;
+
+    progressElement.style.width =
+        `${progress}%`;
+
+
+    // Clear old answers
+
+    answersElement.innerHTML = "";
+
+
+    // Create answers
+
+    current.options.forEach((optionText) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "answer";
+
+        button.textContent =
+            optionText;
+
+
+        button.addEventListener(
+            "click",
+            () => selectAnswer(
+                button,
+                optionText
+            )
+        );
+
+
+        answersElement.appendChild(button);
+
     });
+
 }
 
-function selectAnswer(selectedButton, selectedAnswer) {
 
-    const correctAnswer = questions[currentQuestion].answer;
+// SELECT ANSWER
 
-    const allOptions =
-        document.querySelectorAll(".option");
+function selectAnswer(
+    selectedButton,
+    selectedAnswer
+) {
 
-    allOptions.forEach(button => {
-        button.disabled = true;
-
-        if (button.textContent === correctAnswer) {
-            button.classList.add("correct");
-        }
-    });
-
-    if (selectedAnswer === correctAnswer) {
-        score++;
-        selectedButton.classList.add("correct");
-    } else {
-        selectedButton.classList.add("wrong");
+    if (answered) {
+        return;
     }
 
-    scoreElement.textContent = `Score: ${score}`;
 
-    nextButton.disabled = false;
+    answered = true;
+
+
+    const correctAnswer =
+        questions[currentQuestion].answer;
+
+
+    const allAnswers =
+        document.querySelectorAll(".answer");
+
+
+    // Disable buttons
+
+    allAnswers.forEach((button) => {
+
+        button.disabled = true;
+
+    });
+
+
+    // Correct
+
+    if (selectedAnswer === correctAnswer) {
+
+        selectedButton.classList.add("correct");
+
+        score++;
+
+    }
+
+    // Wrong
+
+    else {
+
+        selectedButton.classList.add("wrong");
+
+
+        // Show correct answer
+
+        allAnswers.forEach((button) => {
+
+            if (
+                button.textContent ===
+                correctAnswer
+            ) {
+
+                button.classList.add("correct");
+
+            }
+
+        });
+
+    }
+
+
+    scoreElement.textContent =
+        score;
+
+
+    nextBtn.disabled = false;
+
 }
 
-nextButton.addEventListener("click", () => {
+
+// NEXT QUESTION
+
+nextBtn.addEventListener("click", () => {
 
     currentQuestion++;
 
-    if (currentQuestion < questions.length) {
+
+    if (
+        currentQuestion <
+        questions.length
+    ) {
+
         loadQuestion();
-    } else {
-        showResult();
+
     }
+
+    else {
+
+        showResult();
+
+    }
+
 });
+
+
+// SHOW RESULT
 
 function showResult() {
 
-    document.getElementById("quiz-screen")
-        .classList.add("hidden");
+    quizScreen.classList.add("hidden");
 
-    document.getElementById("result-screen")
-        .classList.remove("hidden");
+    resultScreen.classList.remove("hidden");
 
-    document.getElementById("final-score").textContent =
-        `${score}/${questions.length}`;
+
+    finalScore.textContent =
+        score;
+
+
+    totalQuestions.textContent =
+        questions.length;
+
+
+    const percentageValue =
+        Math.round(
+            (score / questions.length) * 100
+        );
+
+
+    percentage.textContent =
+        `${percentageValue}% Correct`;
+
 }
 
-function restartQuiz() {
+
+// RESTART
+
+restartBtn.addEventListener("click", () => {
 
     currentQuestion = 0;
+
     score = 0;
 
-    document.getElementById("quiz-screen")
-        .classList.remove("hidden");
 
-    document.getElementById("result-screen")
-        .classList.add("hidden");
+    resultScreen.classList.add("hidden");
+
+    quizScreen.classList.remove("hidden");
+
 
     loadQuestion();
-}
 
-loadQuestion();
+});
